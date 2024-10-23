@@ -144,6 +144,8 @@ checkoutBtn.addEventListener("click", function () {
   // Verificação do carrinho
   if (cart.length === 0) {
     carrinhoWarn.classList.remove("hidden");
+    
+
     return; // Para aqui se o carrinho estiver vazio
   } else {
     carrinhoWarn.classList.add("hidden"); // Esconde o aviso do carrinho
@@ -152,7 +154,19 @@ checkoutBtn.addEventListener("click", function () {
   // Verificação do campo de endereço
   if (addressInput.value === "") {
     addressWarn.classList.remove("hidden");
-    addressInput.classList.add("border-red-500"); // Adiciona a borda vermelha se o endereço estiver vazio
+    addressInput.classList.add("border-red-500");     // Adiciona a borda vermelha se o endereço estiver vazio
+    Toastify({
+      text: "Por favor, insira seu endereço.",
+      duration: 3000,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "#ef4444",
+      },
+    }).showToast();
+    return; // Para aqui se o endereço estiver vazio
   } else {
     addressWarn.classList.add("hidden"); // Esconde o aviso do endereço
     addressInput.classList.remove("border-red-500"); // Remove a borda vermelha se o endereço for preenchido
@@ -162,15 +176,18 @@ checkoutBtn.addEventListener("click", function () {
   const cartItems = cart.map((item) => {
       return (
         ` ${item.name} Quantitdade: ${item.quantity} | Preço: R$${item.price.toFixed(2)} |` 
-      )
-    }).join("")
-  const message = encodeURIComponent(cartItems)
-  const phone = "31984245598"
-  window.open(`https://wa.me/${phone}?text=${message} Endreço: ${addressInput.value}`, "_blank")
+      );
+    }).join("");
 
+  const message = encodeURIComponent(cartItems);
+  const phone = "5531984245598";
+  window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank");
+
+  // Limpa o carrinho
   cart.length = 0;
   updateCartModal();
-})
+});
+
 
 // verificar a hora e manipular o card horario
 
@@ -184,14 +201,14 @@ const spanItem = document.getElementById("date-span");
 
 const isOpen = checkResturantOpen();
 
-// if (isOpen) {
-//   spanItem.classList.remove("bg-red-500");
-//   spanItem.classList.add("bg-green-500");
-// } else {
-//   alert("Estamos fechado no momento abriremos as 7:00!");
-//   spanItem.classList.remove("bg-green-500");
-//   spanItem.classList.add("bg-red-500");
-// }
+if (isOpen) {
+  spanItem.classList.remove("bg-red-500");
+  spanItem.classList.add("bg-green-500");
+} else {
+  alert("Estamos fechado no momento abriremos as 7:00!");
+  spanItem.classList.remove("bg-green-500");
+  spanItem.classList.add("bg-red-500");
+}
 
 function updateHeaderFilter() {
   const currentTime = new Date(); // Obtém a data e hora atuais
